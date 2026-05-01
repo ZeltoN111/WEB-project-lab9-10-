@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { getTrainById, formatTime, formatDate, formatDuration } from "../data/trains";
 import WagonSelector from "../components/WagonSelector";
 import SeatMap from "../components/SeatMap";
+import BookingForm from "../components/BookingForm";
 import { Train, Clock, MapPin } from "lucide-react";
 import styles from "./Booking.module.css";
 
@@ -35,7 +36,7 @@ function Booking() {
 
   function handleWagonSelect(wagonId) {
     setSelectedWagonId(wagonId);
-    setSelectedSeats([]); // скидаємо вибір при зміні вагона
+    setSelectedSeats([]);
   }
 
   function handleToggleSeat(seatId) {
@@ -44,6 +45,12 @@ function Booking() {
         ? prev.filter((id) => id !== seatId)
         : [...prev, seatId]
     );
+  }
+
+  function handleBookingSuccess(bookingData) {
+    // Тимчасово — просто логуємо, localStorage додамо в наступному кроці
+    console.log("Booking data:", bookingData);
+    alert(`Бронювання прийнято! Місця: ${bookingData.seats.length}`);
   }
 
   return (
@@ -90,11 +97,14 @@ function Booking() {
           />
         )}
 
-        {/* Форма бронювання — буде в наступному кроці */}
-        {selectedSeats.length > 0 && (
-          <div className={styles.formPlaceholder}>
-            <p>Форма бронювання буде тут (наступний крок)</p>
-          </div>
+        {/* Форма бронювання */}
+        {selectedSeats.length > 0 && selectedWagon && (
+          <BookingForm
+            selectedSeats={selectedSeats}
+            wagon={selectedWagon}
+            train={train}
+            onSuccess={handleBookingSuccess}
+          />
         )}
       </div>
     </main>
