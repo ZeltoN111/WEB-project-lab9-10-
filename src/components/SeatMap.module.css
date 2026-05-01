@@ -26,7 +26,7 @@
 /* Легенда */
 .legend {
   display: flex;
-  gap: 12px;
+  gap: 16px;
   flex-wrap: wrap;
 }
 
@@ -60,64 +60,123 @@
   border: 1.5px solid var(--color-seat-taken);
 }
 
-/* Сітка місць */
+/* Сітка місць з анімацією появи */
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(42px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(44px, 1fr));
   gap: 8px;
-  max-width: 600px;
+  max-width: 620px;
+}
+
+/* Анімація появи кожного місця */
+@keyframes seatAppear {
+  from {
+    opacity: 0;
+    transform: scale(0.7);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 .seat {
   aspect-ratio: 1;
   border-radius: var(--radius-sm);
   border: 1.5px solid;
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all var(--transition);
+  transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   align-items: center;
   justify-content: center;
   font-family: var(--font-body);
+  animation: seatAppear 0.25s ease both;
 }
 
+/* Затримка для cascade ефекту */
+.seat:nth-child(1)  { animation-delay: 0.01s; }
+.seat:nth-child(2)  { animation-delay: 0.02s; }
+.seat:nth-child(3)  { animation-delay: 0.03s; }
+.seat:nth-child(4)  { animation-delay: 0.04s; }
+.seat:nth-child(5)  { animation-delay: 0.05s; }
+.seat:nth-child(6)  { animation-delay: 0.06s; }
+.seat:nth-child(7)  { animation-delay: 0.07s; }
+.seat:nth-child(8)  { animation-delay: 0.08s; }
+.seat:nth-child(9)  { animation-delay: 0.09s; }
+.seat:nth-child(10) { animation-delay: 0.10s; }
+.seat:nth-child(n+11) { animation-delay: 0.12s; }
+
+/* Вільне місце — зелений */
 .seatFree {
   background: var(--color-seat-free-bg);
   border-color: var(--color-seat-free);
   color: var(--color-seat-free);
 }
 
-.seatFree:hover {
-  background: rgba(34, 197, 94, 0.3);
-  transform: scale(1.08);
-  box-shadow: 0 0 10px rgba(34, 197, 94, 0.3);
+.seatFree:hover:not(:disabled) {
+  background: rgba(34, 197, 94, 0.28);
+  transform: scale(1.12);
+  box-shadow: 0 0 14px rgba(34, 197, 94, 0.35), 0 0 4px rgba(34, 197, 94, 0.2);
+  border-color: #4ade80;
+}
+
+.seatFree:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+/* Обране місце — синій */
+@keyframes selectedPulse {
+  0%, 100% { box-shadow: 0 0 10px var(--color-accent-glow); }
+  50%       { box-shadow: 0 0 20px var(--color-accent-glow), 0 0 8px rgba(79,142,247,0.6); }
 }
 
 .seatSelected {
   background: var(--color-seat-selected-bg);
   border-color: var(--color-seat-selected);
   color: var(--color-seat-selected);
-  box-shadow: 0 0 12px var(--color-accent-glow);
-  transform: scale(1.05);
+  transform: scale(1.08);
+  animation: selectedPulse 2s ease-in-out infinite;
 }
 
+.seatSelected:hover {
+  transform: scale(1.13);
+  background: rgba(79, 142, 247, 0.35);
+}
+
+/* Зайняте місце — червоний */
 .seatTaken {
   background: var(--color-seat-taken-bg);
   border-color: var(--color-seat-taken);
   color: var(--color-seat-taken);
   cursor: not-allowed;
-  opacity: 0.6;
+  opacity: 0.55;
 }
 
+/* Підсумок обраних місць */
 .selectedInfo {
-  margin-top: 16px;
+  margin-top: 18px;
   font-size: 0.85rem;
   color: var(--color-text-secondary);
   padding-top: 16px;
   border-top: 1px solid var(--color-border);
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .selectedInfo strong {
   color: var(--color-accent);
+  font-size: 1rem;
+}
+
+@media (max-width: 480px) {
+  .grid {
+    grid-template-columns: repeat(auto-fill, minmax(38px, 1fr));
+    gap: 6px;
+  }
+  .legend {
+    gap: 10px;
+  }
 }
