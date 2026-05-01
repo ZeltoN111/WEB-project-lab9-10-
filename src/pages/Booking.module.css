@@ -1,0 +1,109 @@
+.page {
+  padding: 40px 0 80px;
+  min-height: 100vh;
+}
+
+/* Інфо про рейс */
+.trainInfo {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  padding: 24px 28px;
+  margin-bottom: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  backdrop-filter: blur(16px);
+}
+
+.trainBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--color-accent);
+  background: var(--color-seat-selected-bg);
+  padding: 5px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(79, 142, 247, 0.2);
+  width: fit-content;
+}
+
+.routeRow {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.routeCity {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--color-text-secondary);
+}
+
+.cityName {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.cityTime {
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+}
+
+.routeArrow {
+  font-size: 1.3rem;
+  color: var(--color-accent);
+}
+
+.metaRow {
+  display: flex;
+  gap: 20px;
+  font-size: 0.82rem;
+  color: var(--color-text-secondary);
+}
+
+.metaRow span {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* Зона бронювання */
+.bookingArea {
+  background: var(--color-surface);
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-xl);
+  padding: 48px;
+  text-align: center;
+}
+
+.hint {
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+}
+
+/* 404 */
+.notFound {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding: 80px 0;
+  color: var(--color-text-secondary);
+}
+
+@media (max-width: 600px) {
+  .trainInfo {
+    padding: 18px;
+  }
+  .bookingArea {
+    padding: 32px 16px;
+  }
+}
