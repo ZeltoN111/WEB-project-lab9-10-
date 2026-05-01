@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import { getTrainById, formatTime, formatDate, formatDuration } from "../data/trains";
 import { saveBooking, getBookedSeatsForWagon } from "../services/BookingService";
 import WagonSelector from "../components/WagonSelector";
 import SeatMap from "../components/SeatMap";
 import BookingForm from "../components/BookingForm";
-import { Train, Clock, MapPin } from "lucide-react";
+import { Train, Clock, MapPin, CheckCircle2 } from "lucide-react";
 import styles from "./Booking.module.css";
 
 function Booking() {
@@ -18,9 +19,8 @@ function Booking() {
   );
   const [selectedSeats, setSelectedSeats] = useState([]);
   const [bookedSeats, setBookedSeats] = useState([]);
-  const [bookingDone, setBookingDone] = useState(false);
+  const [lastBooking, setLastBooking] = useState(null);
 
-  // Завантажуємо збережені бронювання при зміні вагона
   useEffect(() => {
     if (!train || !selectedWagonId) return;
     const stored = getBookedSeatsForWagon(train.id, selectedWagonId);
@@ -44,7 +44,6 @@ function Booking() {
 
   const selectedWagon = train.wagons.find((w) => w.id === selectedWagonId);
 
-  // Будуємо вагон з урахуванням збережених бронювань
   const wagonWithBooked = selectedWagon
     ? {
         ...selectedWagon,
@@ -58,7 +57,6 @@ function Booking() {
   function handleWagonSelect(wagonId) {
     setSelectedWagonId(wagonId);
     setSelectedSeats([]);
-    setBookingDone(false);
   }
 
   function handleToggleSeat(seatId) {
@@ -70,10 +68,17 @@ function Booking() {
   }
 
   function handleBookingSuccess(bookingData) {
-    saveBooking(bookingData);
+    const saved = saveBooking(bookingData);
     setBookedSeats((prev) => [...prev, ...bookingData.seats]);
     setSelectedSeats([]);
-    setBookingDone(true);
+    setLastBooking(saved);
+
+    toast.success(
+      `✅ Заброньовано ${bookingData.seats.length} ${
+        bookingData.seats.length === 1 ? "квиток" : "квитки"
+      } у вагоні №${bookingData.wagonNumber}`,
+      { autoClose: 5000 }
+    );
   }
 
   return (
@@ -104,6 +109,26 @@ function Booking() {
           </div>
         </section>
 
+        {/* Успішне бронювання */}
+        {lastBooking && (
+          <div className={styles.successBanner}>
+            <CheckCircle2 size={22} className={styles.successIcon} />
+            <div>
+              <p className={styles.successTitle}>Бронювання підтверджено!</p>
+              <p className={styles.successSub}>
+                Квиток #{lastBooking.id.slice(-6).toUpperCase()} збережено.
+                Можна забронювати ще місця.
+              </p>
+            </div>
+            <button
+              className={`btn btn-ghost ${styles.homeBtn}`}
+              onClick={() => navigate("/")}
+            >
+              На головну
+            </button>
+          </div>
+        )}
+
         {/* Вибір вагона */}
         <WagonSelector
           wagons={train.wagons}
@@ -121,7 +146,7 @@ function Booking() {
         )}
 
         {/* Форма бронювання */}
-        {selectedSeats.length > 0 && wagonWithBooked && !bookingDone && (
+        {selectedSeats.length > 0 && wagonWithBooked && (
           <BookingForm
             selectedSeats={selectedSeats}
             wagon={wagonWithBooked}
