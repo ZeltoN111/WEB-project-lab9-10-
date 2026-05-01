@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getTrainById, formatTime, formatDate, formatDuration } from "../data/trains";
+import { saveBooking, getBookedSeatsForWagon } from "../services/BookingService";
 import WagonSelector from "../components/WagonSelector";
 import SeatMap from "../components/SeatMap";
 import BookingForm from "../components/BookingForm";
@@ -16,6 +17,15 @@ function Booking() {
     train ? train.wagons[0].id : null
   );
   const [selectedSeats, setSelectedSeats] = useState([]);
+  const [bookedSeats, setBookedSeats] = useState([]);
+  const [bookingDone, setBookingDone] = useState(false);
+
+  // Завантажуємо збережені бронювання при зміні вагона
+  useEffect(() => {
+    if (!train || !selectedWagonId) return;
+    const stored = getBookedSeatsForWagon(train.id, selectedWagonId);
+    setBookedSeats(stored);
+  }, [selectedWagonId, train]);
 
   if (!train) {
     return (
@@ -34,9 +44,21 @@ function Booking() {
 
   const selectedWagon = train.wagons.find((w) => w.id === selectedWagonId);
 
+  // Будуємо вагон з урахуванням збережених бронювань
+  const wagonWithBooked = selectedWagon
+    ? {
+        ...selectedWagon,
+        seats: selectedWagon.seats.map((s) => ({
+          ...s,
+          taken: s.taken || bookedSeats.includes(s.id),
+        })),
+      }
+    : null;
+
   function handleWagonSelect(wagonId) {
     setSelectedWagonId(wagonId);
     setSelectedSeats([]);
+    setBookingDone(false);
   }
 
   function handleToggleSeat(seatId) {
@@ -48,9 +70,10 @@ function Booking() {
   }
 
   function handleBookingSuccess(bookingData) {
-    // Тимчасово — просто логуємо, localStorage додамо в наступному кроці
-    console.log("Booking data:", bookingData);
-    alert(`Бронювання прийнято! Місця: ${bookingData.seats.length}`);
+    saveBooking(bookingData);
+    setBookedSeats((prev) => [...prev, ...bookingData.seats]);
+    setSelectedSeats([]);
+    setBookingDone(true);
   }
 
   return (
@@ -89,19 +112,19 @@ function Booking() {
         />
 
         {/* Схема місць */}
-        {selectedWagon && (
+        {wagonWithBooked && (
           <SeatMap
-            wagon={selectedWagon}
+            wagon={wagonWithBooked}
             selectedSeats={selectedSeats}
             onToggleSeat={handleToggleSeat}
           />
         )}
 
         {/* Форма бронювання */}
-        {selectedSeats.length > 0 && selectedWagon && (
+        {selectedSeats.length > 0 && wagonWithBooked && !bookingDone && (
           <BookingForm
             selectedSeats={selectedSeats}
-            wagon={selectedWagon}
+            wagon={wagonWithBooked}
             train={train}
             onSuccess={handleBookingSuccess}
           />
