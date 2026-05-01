@@ -1,0 +1,123 @@
+.wrapper {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  padding: 24px;
+  backdrop-filter: blur(12px);
+  margin-bottom: 24px;
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+/* Легенда */
+.legend {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  color: var(--color-text-secondary);
+}
+
+.legendItem::before {
+  content: '';
+  width: 14px;
+  height: 14px;
+  border-radius: 4px;
+}
+
+.legendItem.free::before {
+  background: var(--color-seat-free-bg);
+  border: 1.5px solid var(--color-seat-free);
+}
+
+.legendItem.selected::before {
+  background: var(--color-seat-selected-bg);
+  border: 1.5px solid var(--color-seat-selected);
+}
+
+.legendItem.taken::before {
+  background: var(--color-seat-taken-bg);
+  border: 1.5px solid var(--color-seat-taken);
+}
+
+/* Сітка місць */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(42px, 1fr));
+  gap: 8px;
+  max-width: 600px;
+}
+
+.seat {
+  aspect-ratio: 1;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid;
+  font-size: 0.72rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-body);
+}
+
+.seatFree {
+  background: var(--color-seat-free-bg);
+  border-color: var(--color-seat-free);
+  color: var(--color-seat-free);
+}
+
+.seatFree:hover {
+  background: rgba(34, 197, 94, 0.3);
+  transform: scale(1.08);
+  box-shadow: 0 0 10px rgba(34, 197, 94, 0.3);
+}
+
+.seatSelected {
+  background: var(--color-seat-selected-bg);
+  border-color: var(--color-seat-selected);
+  color: var(--color-seat-selected);
+  box-shadow: 0 0 12px var(--color-accent-glow);
+  transform: scale(1.05);
+}
+
+.seatTaken {
+  background: var(--color-seat-taken-bg);
+  border-color: var(--color-seat-taken);
+  color: var(--color-seat-taken);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.selectedInfo {
+  margin-top: 16px;
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+  padding-top: 16px;
+  border-top: 1px solid var(--color-border);
+}
+
+.selectedInfo strong {
+  color: var(--color-accent);
+}

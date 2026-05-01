@@ -1,0 +1,62 @@
+.wrapper {
+  margin-bottom: 28px;
+}
+
+.label {
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 12px;
+}
+
+.list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.wagon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 12px 20px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--transition);
+  min-width: 110px;
+  font-family: var(--font-body);
+}
+
+.wagon:hover {
+  border-color: var(--color-accent);
+  background: var(--color-surface-hover);
+}
+
+.wagon.active {
+  border-color: var(--color-accent);
+  background: var(--color-seat-selected-bg);
+  box-shadow: 0 0 16px var(--color-accent-glow);
+}
+
+.wagonNum {
+  font-weight: 700;
+  font-size: 0.88rem;
+  color: var(--color-text-primary);
+}
+
+.wagonType {
+  font-size: 0.75rem;
+  color: var(--color-text-secondary);
+}
+
+.wagonFree {
+  font-size: 0.75rem;
+  color: var(--color-seat-free);
+  font-weight: 600;
+}
