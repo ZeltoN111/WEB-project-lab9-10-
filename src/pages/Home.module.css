@@ -1,0 +1,29 @@
+.page {
+  padding: 48px 0 80px;
+  min-height: 100vh;
+}
+
+.hero {
+  margin-bottom: 40px;
+}
+
+.subtitle {
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  margin-bottom: 8px;
+}
+
+.title {
+  font-size: clamp(2.2rem, 5vw, 3.5rem);
+  font-weight: 700;
+  line-height: 1.15;
+  color: var(--color-text-primary);
+}
+
+.accent {
+  color: var(--color-accent);
+  position: relative;
+}
